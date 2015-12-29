@@ -1,7 +1,6 @@
---
+---
 # Rename a server based on the 'hostvar' in the inventory file
-
-- hosts: test-servers	
+- hosts: all
   become: yes 
   become_method: sudo 
 
@@ -11,3 +10,5 @@
   tasks:
    - name: Edit resolve.conf domain
      lineinfile: dest=/etc/resolv.conf regexp='^domain*' line='domain {{ domainvar }}' backup=yes 
+   - name: Edit resolve.conf search
+     lineinfile: dest=/etc/resolv.conf regexp='^search*' line='search {{ domainvar }}'
