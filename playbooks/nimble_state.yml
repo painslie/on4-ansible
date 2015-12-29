@@ -1,0 +1,34 @@
+-
+# Testing installion of Nginx, etc.
+#
+# Note that Ansible has us define the state you wish the service to be in, 
+# rather than defining the change you want. Ansible will decide if a change is needed, 
+# we just tell it the desired result.
+
+- hosts: edgeservers
+  become: yes 
+  become_method: sudo 
+
+  tasks:
+   - name: Add Nimble source repository into sources list
+     lineinfile:
+       dest=/etc/apt/sources.list
+       backup=yes
+       line='deb http://nimblestreamer.com/debian/ jessie/'
+       state=present
+       insertafter=EOF
+
+   - name: Add apt signing key
+     apt_key: url=http://nimblestreamer.com/gpg.key state=present
+
+   - name: Install Nimble
+     apt: pkg=nimble state=installed update_cache=true
+
+   - name: Register Nimble with WMSPanel login
+     shell: /usr/bin/nimble_regutil -u karel.boek@raskenlund.com -p xCdDYGEEehQ
+     notify:
+      - Restart Nimble
+
+  handlers:
+   - name: Restart Nimble
+     service: name=nimble state=restarted

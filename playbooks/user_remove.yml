@@ -1,0 +1,10 @@
+--
+- hosts: edgeservers
+  sudo: yes
+
+  vars:
+    userid: user1
+
+  tasks:
+  - name: Remove user "{{ userid }}".
+    user: name="{{ userid }}" state=absent remove=yes

@@ -1,0 +1,24 @@
+--
+# Note!! this updates the 'sudoers' file!
+
+- hosts: test-servers
+  become: yes
+  become_method: sudo
+
+  vars:
+    userid: on4-admin
+    hash: hash
+
+  tasks:
+  - name: Create user "{{ userid }}" with admin access.
+    user: name="{{ userid }}" shell=/bin/bash groups=admin,adm,dialout,cdrom,floppy,audio,dip,video,plugdev
+
+  - name: Placing key
+    authorized_key: user="{{ userid }}" key="{{ lookup('file', '~/keys/on4-anaconda.pub') }}"
+
+  - name: Set Sudoers file to NOPASSWORD for those in admin group
+    lineinfile: "dest=/etc/sudoers state=present regexp='^%admin' line='%admin ALL=(ALL) NOPASSWD: ALL'"
+
+## this is not working; it corrupts the server
+##   name: Comment
+##    lineinfile: "dest=/etc/sudoers state=present regexp='^%blah' line='%admin blah'"-

@@ -1,0 +1,17 @@
+--
+- hosts: edgeservers
+  become: yes 
+  become_method: sudo 
+
+
+  vars:
+    userid: on4-admin
+    hash: hash
+
+  tasks:
+
+  - name: Set Sudoers file to NOPASSWORD for those in admin group
+    lineinfile: "dest=/home/admin/sudoerstest state=present regexp='^%admin' line='%admin ALL=(ALL) NOPASSWD: ALL'"
+
+  - name: Comment
+    lineinfile: "dest=/home/admin/sudoerstest state=present regexp='^Members' line='Members of the admin group gain root privileges without password'"

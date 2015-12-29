@@ -1,0 +1,13 @@
+--
+# Rename a server based on the 'hostvar' in the inventory file
+
+- hosts: test-servers	
+  become: yes 
+  become_method: sudo 
+
+  vars:
+    domainvar: "on4cdn.net"
+
+  tasks:
+   - name: Edit resolve.conf domain
+     lineinfile: dest=/etc/resolv.conf regexp='^domain*' line='domain {{ domainvar }}' backup=yes 
