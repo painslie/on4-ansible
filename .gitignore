@@ -1,8 +1,9 @@
 # My Ignores
 ############
-# Ignore hidden files except for the .gitignore file
+# Ignore hidden files except for these.. !..
 .*
 !/.gitignore
+!/.ansible.cfg
 
 keys/
 ans1ble/
